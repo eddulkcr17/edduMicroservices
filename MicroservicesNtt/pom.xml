@@ -19,6 +19,9 @@
   <modules>
     <module>microservice-gateway</module>
     <module>microservice-eureka</module>
+    <module>microservice-config</module>
+    <module>microservice-member</module>
+    <module>microservice-saving</module>
   </modules>
 
   <properties>
