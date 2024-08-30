@@ -45,5 +45,9 @@ public class ClientController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/search-account/{idClient}")
+    public ResponseEntity<?> findAccountsByIdClient(@PathVariable Long idClient){
+        return ResponseEntity.ok(clientService.findAccountByClient(idClient));
+    }
 
 }

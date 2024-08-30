@@ -25,4 +25,9 @@ public class AccountServiceImpl implements  IAccountService{
     public void save(Account account) {
         accountRepository.save(account);
     }
+
+    @Override
+    public Object findByIdClient(Long idClient) {
+        return accountRepository.findByIdClient(idClient);
+    }
 }

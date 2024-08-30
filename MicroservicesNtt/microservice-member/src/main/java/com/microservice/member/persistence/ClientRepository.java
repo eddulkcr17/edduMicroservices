@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ClientRepository extends CrudRepository<Client, Long> {
-    @Query("SELECT c FROM Client c WHERE c.accountId = :idAccount")
-    List<Client> findAllClient(Long idAccount);
+
 }
