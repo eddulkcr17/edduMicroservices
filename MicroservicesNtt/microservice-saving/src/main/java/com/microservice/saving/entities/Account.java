@@ -32,7 +32,6 @@ public class Account {
     @Column(name = "saldo_actual")
     private Long accountBalance;
 
-
     @Column(name = "cliente_id")
     private Long cliente;
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/movements")
 public class MovementsController {
 
-    @Autowired
+    @Autowired(required=true)
     private IMovementService movementService;
 
     @PostMapping("/create")

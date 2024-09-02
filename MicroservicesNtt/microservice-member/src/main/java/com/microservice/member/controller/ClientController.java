@@ -13,7 +13,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/client")
 public class ClientController {
-    @Autowired
+    @Autowired(required = true)
     private IClientService clientService;
 
     @PostMapping("/create")

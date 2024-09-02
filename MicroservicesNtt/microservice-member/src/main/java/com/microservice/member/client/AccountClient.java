@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "msvc-saving", url="localhost:9090/api/account" )
+@FeignClient(name = "msvc-saving", url="localhost:8080/api/account" )
 public interface AccountClient {
     @GetMapping("/search-by-client/{idClient}")
     List<AccountDto> findByAllAccountsByClient(@PathVariable Long idClient);

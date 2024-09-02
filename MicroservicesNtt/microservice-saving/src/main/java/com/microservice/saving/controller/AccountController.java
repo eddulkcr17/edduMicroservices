@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/account")
 public class AccountController {
 
-    @Autowired
+    @Autowired(required = true)
     private IAccountService accountService;
 
     @PostMapping("/create")
