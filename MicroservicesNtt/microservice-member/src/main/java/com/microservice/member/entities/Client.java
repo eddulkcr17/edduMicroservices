@@ -1,19 +1,27 @@
 package com.microservice.member.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Entity
-@Table(name="client")
+
 @AllArgsConstructor
 @NoArgsConstructor
+@DiscriminatorValue("CLIENT")
 public class Client extends Person{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_cliente", updatable = false, nullable = false)
+    private Long clientId;
 
     @Column(name = "contrasena",nullable = false)
     private String clientPass;
     @Column(name = "estado",nullable = false)
     private boolean clientState;
+
+    @OneToOne
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_cliente", nullable = false)
+    private Person person;
 }

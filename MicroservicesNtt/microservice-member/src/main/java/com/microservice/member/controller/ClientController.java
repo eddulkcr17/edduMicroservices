@@ -13,7 +13,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/client")
 public class ClientController {
-    @Autowired
+    @Autowired(required = true)
     private IClientService clientService;
 
     @PostMapping("/create")
@@ -45,5 +45,9 @@ public class ClientController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/search-account/{idClient}")
+    public ResponseEntity<?> findAccountsByIdClient(@PathVariable Long idClient){
+        return ResponseEntity.ok(clientService.findAccountByClient(idClient));
+    }
 
 }

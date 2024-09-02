@@ -8,4 +8,5 @@ public interface IAccountService {
     List<Account> findAll();
     Account findById(Long id);
     void save(Account account);
+    Object findByIdClient(Long idClient);
 }

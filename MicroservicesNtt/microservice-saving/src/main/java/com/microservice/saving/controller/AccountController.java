@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/account")
+@RequestMapping("/api/account")
 public class AccountController {
 
-    @Autowired
+    @Autowired(required = true)
     private IAccountService accountService;
 
     @PostMapping("/create")
@@ -25,4 +25,9 @@ public class AccountController {
 
     @GetMapping("/search/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id){return ResponseEntity.ok(accountService.findById(id));}
+
+    @GetMapping("/search-by-client/{idClient}")
+    public ResponseEntity<?> findByIdClient(@PathVariable Long idClient){
+        return ResponseEntity.ok(accountService.findByIdClient(idClient));
+    }
 }
