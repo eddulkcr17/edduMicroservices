@@ -1,12 +1,11 @@
-package com.microservice.member.services;
+package com.microservice.member.persistence;
 
 import com.microservice.member.entities.Client;
-import com.microservice.member.http.response.AccountByClientResponse;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface IClientService {
+public interface IClientDAO {
 
     List<Client> findAll();
 

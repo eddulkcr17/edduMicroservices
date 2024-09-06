@@ -1,16 +1,19 @@
 package com.microservice.saving.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
-@Data
-@Entity
+@Getter
+@Setter
 @Builder
-@Table(name="movimientos")
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name="movimientos")
 public class Movements {
 
     @Id
@@ -22,15 +25,16 @@ public class Movements {
     private Date movementDate;
 
     @Column(name = "tipo_movimiento")
-    private String movementType;
+    private char movementType;
 
     @Column(name = "valor")
-    private Long movementValue;
+    private BigDecimal movementValue;
 
     @Column(name = "saldo")
-    private Long movementBalance;
+    private BigDecimal movementBalance;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cuenta_id")
-    private Account cuenta;
+    @JoinColumn(name = "cuenta_id", nullable = false)
+    @JsonIgnore
+    private Account account;
 }

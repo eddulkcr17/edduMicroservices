@@ -1,18 +1,19 @@
-package com.microservice.saving.sevice;
+package com.microservice.saving.persistence.impl;
 
 import com.microservice.saving.entities.Account;
-import com.microservice.saving.persistence.IAccountRepository;
+import com.microservice.saving.persistence.IAccountDAO;
+import com.microservice.saving.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
-public class AccountServiceImpl implements  IAccountService{
+public class AccountDAOImpl implements IAccountDAO {
 
     @Autowired
-    private IAccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
     @Override
     public List<Account> findAll() {
@@ -20,8 +21,8 @@ public class AccountServiceImpl implements  IAccountService{
     }
 
     @Override
-    public Account findById(Long id) {
-        return accountRepository.findById(id).orElseThrow();
+    public Optional<Account> findById(Long id) {
+        return accountRepository.findById(id);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class AccountServiceImpl implements  IAccountService{
     }
 
     @Override
-    public Object findByIdClient(Long idClient) {
-        return accountRepository.findByIdClient(idClient);
+    public void deleteById(Long id) {
+        accountRepository.deleteById(id);
     }
 }
