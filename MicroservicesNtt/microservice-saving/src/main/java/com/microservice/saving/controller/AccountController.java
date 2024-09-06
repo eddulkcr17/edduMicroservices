@@ -2,6 +2,7 @@ package com.microservice.saving.controller;
 
 import com.microservice.saving.controller.dto.AccountDTO;
 import com.microservice.saving.entities.Account;
+import com.microservice.saving.mapper.AccountMapper;
 import com.microservice.saving.sevices.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,20 +21,16 @@ public class AccountController {
   @Autowired
   private IAccountService accountService;
 
+    @Autowired
+    private AccountMapper accountMapper;
+
   @GetMapping("/find/{id}")
   public ResponseEntity<?> findById(@PathVariable Long id){
       Optional<Account> accountOptional = accountService.findById(id);
-      if (accountOptional.isPresent()){
+      if (accountOptional.isPresent()) {
           Account account = accountOptional.get();
-
-          AccountDTO accountDTO = AccountDTO.builder()
-                  .accountNumber(account.getAccountNumber())
-                  .accountType(account.getAccountType())
-                  .initialBalance(account.getInitialBalance())
-                  .accountState(account.getAccountState())
-                  .cliente(account.getCliente())
-                  .build();
-          return  ResponseEntity.ok(accountDTO);
+          AccountDTO accountDTO = accountMapper.accountToAccountDTO(account);
+          return ResponseEntity.ok(accountDTO);
       }
       return ResponseEntity.notFound().build();
   }
@@ -41,17 +38,9 @@ public class AccountController {
   @GetMapping("/findAll")
   public ResponseEntity<?> findAll(){
       try {
-          List<AccountDTO> accountList = accountService.findAll()
-                  .stream()
-                  .map(account -> AccountDTO.builder()
-                          .accountId(account.getAccountId())
-                          .accountNumber(account.getAccountNumber())
-                          .accountType(account.getAccountType())
-                          .accountBalance(account.getAccountBalance())
-                          .build())
-                  .toList();
-
-          return ResponseEntity.ok(accountList);
+          List<Account> accountList = accountService.findAll();
+          List<AccountDTO> accountDTOList = accountMapper.accountsToAccountDTOs(accountList);
+          return ResponseEntity.ok(accountDTOList);
       } catch (Exception e) {
           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
       }
@@ -60,41 +49,34 @@ public class AccountController {
 
   @PostMapping("/save")
   public ResponseEntity<?> save(@RequestBody AccountDTO accountDTO) throws URISyntaxException {
-        if (accountDTO.getAccountNumber().describeConstable().isEmpty()){
-            return ResponseEntity.badRequest().build();
-        }
-        accountService.save(Account.builder().accountNumber(accountDTO.getAccountNumber())
-                .initialBalance(accountDTO.getInitialBalance())
-                .accountType(accountDTO.getAccountType())
-                .accountState(accountDTO.getAccountState())
-                .build());
-
-        return ResponseEntity.created(new URI("/api/account/save")).build();
+      if (accountDTO.getAccountNumber() == null || accountDTO.getAccountNumber().describeConstable().isEmpty()) {
+          return ResponseEntity.badRequest().build();
+      }
+      Account account = accountMapper.accountDTOToAccount(accountDTO);
+      accountService.save(account);
+      return ResponseEntity.created(new URI("/api/accounts/save")).build();
   }
 
   @PutMapping("/update/{id}")
     public ResponseEntity<?> updateAccount(@PathVariable Long id,@RequestBody AccountDTO accountDTO){
       Optional<Account> accountOptional = accountService.findById(id);
-      if (accountOptional.isPresent()){
+      if (accountOptional.isPresent()) {
           Account account = accountOptional.get();
-          account.setAccountNumber(accountDTO.getAccountNumber());
-          account.setAccountBalance(accountDTO.getAccountBalance());
-          account.setAccountType(accountDTO.getAccountType());
-          account.setAccountState(accountDTO.getAccountState());
+          account = accountMapper.accountDTOToAccount(accountDTO);
+          account.setAccountId(id); // Asegúrate de que el ID se mantenga
           accountService.save(account);
           return ResponseEntity.ok("Cuenta actualizada");
       }
       return ResponseEntity.notFound().build();
   }
 
-  @DeleteMapping("/delete/{id}")
-  public ResponseEntity deleteById(@PathVariable Long id){
-      if(id != null){
-          accountService.deleteById(id);
-          return ResponseEntity.ok("Cuenta eliminada");
-      }
-      return ResponseEntity.noContent().build();
-
-  }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        if (id != null) {
+            accountService.deleteById(id);
+            return ResponseEntity.ok("Cuenta eliminada");
+        }
+        return ResponseEntity.noContent().build();
+    }
 
 }

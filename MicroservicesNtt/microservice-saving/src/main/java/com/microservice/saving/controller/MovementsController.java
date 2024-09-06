@@ -3,6 +3,7 @@ package com.microservice.saving.controller;
 
 import com.microservice.saving.controller.dto.MovementDTO;
 import com.microservice.saving.entities.Movements;
+import com.microservice.saving.mapper.MovementMapper;
 import com.microservice.saving.sevices.IMovementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,19 +22,15 @@ public class MovementsController {
     @Autowired(required=true)
     private IMovementService movementService;
 
+    private MovementMapper movementMapper;
+
     @GetMapping("/find/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id){
         Optional<Movements> movementsOptional = movementService.findById(id);
         if (movementsOptional.isPresent()){
             Movements movements = movementsOptional.get();
 
-            MovementDTO movementDTO = MovementDTO.builder()
-                    .movementDate(movements.getMovementDate())
-                    .movementType(movements.getMovementType())
-                    .account(movements.getAccount())
-                    .movementValue(movements.getMovementValue())
-                    .movementBalance(movements.getMovementBalance())
-                    .build();
+            MovementDTO movementDTO = movementMapper.movementToMovementDTO(movements);
             return  ResponseEntity.ok(movementDTO);
         }
         return ResponseEntity.notFound().build();
@@ -42,18 +39,10 @@ public class MovementsController {
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll(){
         try {
-            List<MovementDTO> movementDTOList = movementService.findAll()
-                    .stream()
-                    .map(movements -> MovementDTO.builder()
-                            .movementDate(movements.getMovementDate())
-                            .movementType(movements.getMovementType())
-                            .account(movements.getAccount())
-                            .movementValue(movements.getMovementValue())
-                            .movementBalance(movements.getMovementBalance())
-                            .build())
-                    .toList();
+            List<Movements> movementDTOList = movementService.findAll();
+            List<MovementDTO> movementDTOS = movementMapper.movementsToMovementDTOs(movementDTOList);
 
-            return ResponseEntity.ok(movementDTOList);
+            return ResponseEntity.ok(movementDTOS);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -65,13 +54,7 @@ public class MovementsController {
         if (movementDTO.getAccount().getMovimientos().isEmpty() ){
             return ResponseEntity.badRequest().build();
         }
-        movementService.save(Movements.builder()
-                .movementDate(movementDTO.getMovementDate())
-                .movementType(movementDTO.getMovementType())
-                .account(movementDTO.getAccount())
-                .movementValue(movementDTO.getMovementValue())
-                .movementBalance(movementDTO.getMovementBalance())
-                .build());
+       Movements movements = movementMapper.movementDTOTomovement(movementDTO);
 
         return ResponseEntity.created(new URI("/api/account/save")).build();
     }
@@ -80,11 +63,9 @@ public class MovementsController {
     public ResponseEntity<?> updateMovement(@PathVariable Long id,@RequestBody MovementDTO movementDTO){
         Optional<Movements> movementsOptional = movementService.findById(id);
         if (movementsOptional.isPresent()){
-            Movements movements = movementsOptional.get();
-            movements.setMovementDate(movementDTO.getMovementDate());
-            movements.setMovementType(movementDTO.getMovementType());
-            movements.setMovementValue(movementDTO.getMovementValue());
-            movements.setAccount(movementDTO.getAccount());
+           Movements movements = movementsOptional.get();
+           movements = movementMapper.movementDTOTomovement(movementDTO);
+           movements.setMovementId(id);
             movementService.save(movements);
             return ResponseEntity.ok("movieminto actualizado");
         }
