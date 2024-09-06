@@ -20,6 +20,25 @@ por medio de este server se puede visualizar que los servicios esten corrienedo 
 >3.- uso de servidor de gateway para condensar la comunicacion por un solo path como es **localhost:8080**
 ![Screenshot from 2024-09-01 22-00-22](https://github.com/user-attachments/assets/86d0a000-7eee-46f3-b34d-f9eb99547733)
 
+>4 Unit Test: se realizan los test unitarios del proyecto asi como el test de integracion
+>
+>![Screenshot from 2024-09-06 09-12-04](https://github.com/user-attachments/assets/f37277a6-dcec-4c28-82ef-84abab37bc85)
+>
+>![Screenshot from 2024-09-06 09-13-07](https://github.com/user-attachments/assets/3b5eb250-6578-460c-93c9-776d8b87d215)
+
+se agrega el uso de Mappers utilizando MapStruct
+
+![Screenshot from 2024-09-06 09-14-18](https://github.com/user-attachments/assets/39dca422-63a7-4345-bad5-1478f46598b3)
+
+se cambia a una arquitectura desacolpada utilizando DTO's y DAOS
+
+![Screenshot from 2024-09-06 09-15-28](https://github.com/user-attachments/assets/e4f62fa3-e555-4582-9980-a140030b99d2)
+
+
+
+
+
+
 
 
 
