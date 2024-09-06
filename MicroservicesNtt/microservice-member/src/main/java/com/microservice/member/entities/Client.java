@@ -3,9 +3,9 @@ package com.microservice.member.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
 @Entity
-
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @DiscriminatorValue("CLIENT")

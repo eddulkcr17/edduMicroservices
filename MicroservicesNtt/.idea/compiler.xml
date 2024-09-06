@@ -8,10 +8,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="microservice-gateway" />
-        <module name="microservice-saving" />
         <module name="microservice-eureka" />
-        <module name="microservice-member" />
         <module name="microservice-config" />
+      </profile>
+      <profile name="Annotation profile for MicroservicesNtt" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.0/mapstruct-processor-1.6.0.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.0/mapstruct-1.6.0.jar" />
+        </processorPath>
+        <module name="microservice-member" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
